@@ -42,3 +42,15 @@
   color: magenta;
   font-family: cursive
 }
+
+.candy {
+  border: solid 1px white;
+  width: 150px;
+  margin: 10px;
+  background-color: steelblue;
+}
+
+.list { 
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -27,7 +27,7 @@ export default class App extends Component {
                             path="/candies" 
                             exact
                             component={ListPage} 
-                        />                        
+                        />            
                         <Route 
                             path="/candies/:candyId" 
                             exact
