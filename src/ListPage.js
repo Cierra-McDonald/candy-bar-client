@@ -37,7 +37,9 @@ export default class ListPage extends Component {
                     <p>{candy.name}</p>
                     <p>{candy.category}</p>
                     <p>{candy.yumminess}</p>
-                    <p>{candy.has_chocolate ? 'it has has chocolate' : 'choco-free'}</p>
+                    <p>{candy.has_chocolate 
+                        ? 'it has chocolate' 
+                        : 'choco-free'}</p>
                 </div>
                 </Link>
                     )}

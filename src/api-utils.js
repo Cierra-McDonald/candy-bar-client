@@ -52,4 +52,4 @@ export async function updateCandy(id, aPieceOfCandy) {
         return body;
 }
 
-export const getCategoryId = ({ category }, categories) => categories.find(cat => category === cat.name).id;
+export const getCategoryId = (candy, categories) => categories.find(category => candy.category === category.name).id;

@@ -1,30 +1,31 @@
 import React, { Component } from 'react'
-import { getCandy, getCategories, makeCandy, getCategoryId } from './api-utils.js';
+import { getCandy, getCategories, updateCandy, getCategoryId } from './api-utils.js';
 export default class DetailPage extends Component {
-    state ={
+    state = {
         name: '',
         yumminess: 1,
         has_chocolate: false,
-        category_id: 1
+        category_id: 1,
+        categories: []
     }
 
     componentDidMount = async () => {
         const categories = await getCategories();
-        const { 
-            category, 
-            has_chocolate, 
-            name, 
-            owner_id, 
-            yumminess,
-    } = await getCandy(this.props.match.params.candyId);
+    
+        const candy = await getCandy(this.props.match.params.candyId);
 
-        const category_id = getCategoryId({ category }, categories);
+        const category_id = getCategoryId(candy, categories);
+        // this.setState({
+        //     has_chocolate: has_chocolate,
+        //     name: name,
+        //     owner_id: owner_id,
+        //     yumminess: yumminess,
+        //     category_id: category_id
+        // })
         this.setState({
-            has_chocolate: has_chocolate,
-            name: name,
-            owner_id: owner_id,
-            yumminess: yumminess,
-            category_id: category_id
+            ...candy,
+            category_id,
+            categories
         })
     }
 
@@ -48,15 +49,12 @@ export default class DetailPage extends Component {
         e.preventDefault();
 
         // supply our form state to the post endpoint
-        await makeCandy(this.state);
+        await updateCandy(this.props.match.params.candyId, this.state);
 
         this.props.history.push('/candies');
     }
 
     render() {
-        console.log('=============================\n')
-        console.log('|| this.state', this.state)
-        console.log('\n=============================')
         return (
             <div>
                 DETAIL PAGE
@@ -72,18 +70,22 @@ export default class DetailPage extends Component {
                     </label>
                     <label>
                         Has chocolate?
-                        <input value={this.state.has_chocolate} type="checkbox" onChange={this.handleHasChocolateChange} />
+                        <input value={this.state.has_chocolate} type="checkbox" onChange={this.handleHasChocolateChange} checked={this.state.has_chocolate}/>
                     </label>
                     <label>
                         <select value={this.state.category} onChange={this.handleCategoryChange}>
-                            <option value={1} selected={this.state.category_id === 1}>Classic</option>
-                            <option value={2} selected={this.state.category_id === 2}>Modern</option>
-                            <option value={3} selected={this.state.category_id === 3}>Nostalgic</option>
+                            {
+                                this.state.categories
+                                    .map(category => 
+                                    <option value={category.id} selected={this.state.category_id === category.id}>
+                                        {category.name}
+                                    </option>
+                                )
+                            }
                         </select>
                     </label>
-                    <button>Create</button>
+                    <button>Update</button>
                 </form>
-                <button onClick={() => this.setState({ name: 'lady gaga' })}>my candy is called lady gaga</button>
             </div>
         )
     }
